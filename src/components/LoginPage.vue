@@ -247,6 +247,7 @@ import backendPath from "../paths/backendPaths"
                         console.log(res)
                         if(res.status == 200){
                             localStorage.setItem('loggedIn', true)
+                            localStorage.setItem('userDetails', JSON.stringify(res.data))
                             this.$router.push("/home");
                             this.$toast.success("Logged In Successfully",{duration: 2000, position: "top", pauseOnHover: true})
                         }

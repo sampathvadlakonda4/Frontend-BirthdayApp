@@ -35,7 +35,7 @@
             </div>
             <div v-if="showLogin && !showSignUp && !showForgotPassword" class="flex pl-11 flex-col justify-center w-[80%]"
                 style="height: calc(100vh - 45px)">
-                <div class="border-2 border-indigo-500/10 rounded-lg p-8 py-10">
+                <div class="border-2 border-indigo-500/10 bg-indigo-500/[0.12] rounded-lg p-8 py-10">
                     <h3 class="mb-3 uppercase font-bold text-3xl text-slate-600">Log in</h3>
                     <form class="flex flex-col gap-5 mt-10" @submit.prevent="Login">
                         <input
@@ -80,8 +80,22 @@
             </div>
             <div v-if="!showLogin && showSignUp && !showForgotPassword" class="flex pl-11 flex-col justify-center w-[95%]"
                 style="height: calc(100vh - 45px)">
-                <div class="border-2 border-indigo-500/10 rounded-lg p-8 py-10">
-                    <h3 class="mb-3 uppercase font-bold text-3xl text-slate-600">Sign Up</h3>
+                <div class="border-2 border-indigo-500/10 bg-indigo-500/[0.12] rounded-lg p-8 py-10">
+                    <div class="flex justify-between items-center">
+                        <h3 class="mb-3 uppercase font-bold text-3xl text-slate-600">
+                            Sign Up
+                        </h3>
+                        <div class="text-xs">
+                            <div class="flex items-center">
+                                <img class="object-contain w-[75px] h-[75px] border border-slate-300 rounded-full bg-indigo-500/[0.12]" :src="createProfile" v-if="createProfile" />
+                                <span v-if="!createProfile"
+                                    class="w-[75px] h-[75px] py-4 px-6 text-indigo-500/40 border border-slate-300 rounded-full text-3xl bg-indigo-500/[0.12]" >
+                                    <i class="fa-solid fa-user"></i>
+                                </span>
+                                <input class="pl-5 profilepic" type="file" @change="profilePicChanged" />
+                            </div>
+                        </div>
+                    </div>
                     <form class="flex flex-col gap-5 mt-10" @submit.prevent="createUser">
                         <div class="flex gap-2">
                             <input
@@ -94,7 +108,19 @@
                         <input
                             class="w-full rounded pl-3 focus:outline-none border h-[40px]"
                             v-model="createPhoneNumber" type="tel" minlength="10" maxlength="10" placeholder="Enter phone number" required/>
-                        <textarea
+                        <div class="flex gap-2">
+                            <input
+                                class="w-full rounded pl-3 focus:outline-none border h-[40px]"
+                                v-model="createCountry" type="text" placeholder="Enter country name" required/>    
+                            <select v-model="createGender" required
+                                class="w-full rounded pl-3 focus:outline-none border h-[40px]" placeholder="Select Gender">
+                                <option value="">Select Gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>    
+                        <textarea required
                             class="w-full rounded pl-3 focus:outline-none border"
                             v-model="createAddress" placeholder="Enter address">
                         </textarea>
@@ -135,7 +161,7 @@
             </div>
             <div v-if="!showLogin && !showSignUp && showForgotPassword" class="flex pl-11 flex-col justify-center w-[80%]"
                 style="height: calc(100vh - 45px)">
-                <div class="border-2 border-indigo-500/10 rounded-lg p-8 py-10">
+                <div class="border-2 border-indigo-500/10 bg-indigo-500/[0.12] rounded-lg p-8 py-10">
                     <h3 class="mb-3 uppercase font-bold text-3xl text-slate-600">Change Password</h3>
                     <form class="flex flex-col gap-5 mt-10" @submit.prevent="createNewPassword">
                         <input
@@ -223,6 +249,10 @@ import backendPath from "../paths/backendPaths"
                 createAddress: "",
                 createPinCode: "",
                 createPassword: "",
+                createCountry: "",
+                createGender: "",
+                createProfile: null,
+                attachment: null,
 
                 //forgot password
                 show_New_Password: false,
@@ -248,6 +278,7 @@ import backendPath from "../paths/backendPaths"
                         if(res.status == 200){
                             localStorage.setItem('loggedIn', true)
                             localStorage.setItem('userDetails', JSON.stringify(res.data))
+                            await this.$store.commit('createUserDetails',JSON.parse(localStorage.getItem("userDetails")))
                             this.$router.push("/home");
                             this.$toast.success("Logged In Successfully",{duration: 2000, position: "top", pauseOnHover: true})
                         }
@@ -273,6 +304,10 @@ import backendPath from "../paths/backendPaths"
                 this.createAddress = ""
                 this.createPinCode = ""
                 this.createPassword = ""
+                this.createCountry = ""
+                this.createGender = ""
+                this.createProfile = null
+                this.attachment = null
             },
             backToLogin(){
                 this.showLogin = true;
@@ -282,6 +317,75 @@ import backendPath from "../paths/backendPaths"
                 this.email = ''
                 this.password = ''
             },
+            profilePicChanged(event){
+                var input = event.target;
+                if(input.files){
+                    var reader = new FileReader();
+                    reader.onload = (e) => {
+                        this.createProfile = e.target.result;
+                    }
+                    this.attachment = [input.files[0]];
+                    reader.readAsDataURL(input.files[0]);
+                }
+            },
+            // async profilePicChanged(event) {
+            //     const maxWidth = 800;
+            //     const maxHeight = 800;
+            //     const quality = 0.7;
+
+            //     const file = event.target.files[0];
+
+            //     const compressedFile = await this.resizeImage(file, maxWidth, maxHeight, quality);
+            //     console.log(compressedFile);
+
+            //     var reader = new FileReader();
+            //     reader.onload = (e) => {
+            //         this.createProfile = e.target.result;
+            //     }
+            //     this.attachment = [compressedFile];
+            //     reader.readAsDataURL(compressedFile);
+
+            //     // Use the compressed file for upload or other purposes
+            // },
+            // resizeImage(file, maxWidth, maxHeight, quality) {
+            // return new Promise((resolve, reject) => {
+            //     const img = new Image();
+            //     img.src = URL.createObjectURL(file);
+            //     img.onload = () => {
+            //     const canvas = document.createElement('canvas');
+            //     const ctx = canvas.getContext('2d');
+
+            //     let width = img.width;
+            //     let height = img.height;
+
+            //     if (width > height) {
+            //         if (width > maxWidth) {
+            //         height *= maxWidth / width;
+            //         width = maxWidth;
+            //         }
+            //     } else {
+            //         if (height > maxHeight) {
+            //         width *= maxHeight / height;
+            //         height = maxHeight;
+            //         }
+            //     }
+
+            //     canvas.width = width;
+            //     canvas.height = height;
+
+            //     ctx.drawImage(img, 0, 0, width, height);
+
+            //     canvas.toBlob((blob) => {
+            //         const compressedFile = new File([blob], file.name, {
+            //         type: file.type,
+            //         lastModified: Date.now(),
+            //         });
+            //         resolve(compressedFile);
+            //     }, file.type, quality);
+            //     };
+            //     img.onerror = (e) => reject(e);
+            // });
+            // },
             toggle_Created_Password_Eye(){
                 this.show_Created_Password= !this.show_Created_Password
             },
@@ -293,6 +397,9 @@ import backendPath from "../paths/backendPaths"
                     address: this.createAddress,
                     pincode: this.createPinCode,
                     password: this.createPassword,
+                    country: this.createCountry,
+                    gender: this.createGender,
+                    profilepic: JSON.stringify(this.createProfile),
                 }
 
                 try{
@@ -306,6 +413,11 @@ import backendPath from "../paths/backendPaths"
                         this.createAddress = ""
                         this.createPinCode = ""
                         this.createPassword = ""
+                        this.createCountry = ""
+                        this.createGender = ""
+                        this.createProfile = null
+                        this.attachment = null
+                        document.querySelector(".profilepic").value = ""
                     }
                     else{
                         this.$toast.error("Something went wrong",{duration: 2000, position: "top", pauseOnHover: true})

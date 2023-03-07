@@ -23,6 +23,7 @@ const routes = [
     {
         path: "/home",
         name: "home",
+        redirect: "/home/birthdaylists",
         component: HomePage,
         beforeEnter: guardRoute,
         children:[

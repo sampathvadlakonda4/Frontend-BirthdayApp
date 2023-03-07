@@ -1,7 +1,7 @@
 <template>
     <div class="bg-indigo-500/10 h-[100vh]">
         <div class="flex gap-1">
-            <div class="relative bg-white/60 shadow-lg h-[100vh] w-1/5">
+            <div class="relative bg-white/60 shadow-lg h-[100vh] w-1/4">
                 <SideBar />
             </div>
             <div class="p-2 w-full">
@@ -18,7 +18,7 @@
                     </div>
                 </div>
             </div>
-            <div class="bg-white/60 shadow-lg h-[100vh] w-3/12">
+            <div class="bg-white/60 shadow-lg h-[100vh] w-1/3">
                 <RightSideBar />
             </div>
         </div>
@@ -34,11 +34,13 @@ export default{
     },
     data(){
         return{
-            username: JSON.parse(localStorage.getItem("userDetails"))[0]["username"],
+            username: '',
         }
     },
-    mounted(){
-        this.$router.push('/home/birthdaylists');
+    async mounted(){
+        // await this.$store.commit('createUserDetails',JSON.parse(localStorage.getItem("userDetails")))
+        this.username = this.$store.state.userDetails[0]['username']
+        // await this.$router.push('/home/birthdaylists');
     }
 }
 </script>

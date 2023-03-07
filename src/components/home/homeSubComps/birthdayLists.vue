@@ -68,7 +68,8 @@ import backendPath from "../../../paths/backendPaths"
 
         },
         async mounted(){
-            const loggedIn_user = JSON.parse(localStorage.getItem('userDetails'))
+            await this.$store.commit('createUserDetails',JSON.parse(localStorage.getItem("userDetails")))
+            const loggedIn_user = this.$store.state.userDetails;
             let path = backendPath.expressPath+"/birthday/list/search"
             try{
                 let res = await axios.post(path,{loginuserid: loggedIn_user[0]["_id"]})

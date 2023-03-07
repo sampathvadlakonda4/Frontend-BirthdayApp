@@ -3,11 +3,13 @@ import { createStore } from "vuex";
 const store = createStore({
     state(){
         return{
-            username: "hello",
+            userDetails: [],
         }
     },
     mutations: {
-
+        createUserDetails(state,payload){
+            state.userDetails = payload
+        }
     }
 })
 

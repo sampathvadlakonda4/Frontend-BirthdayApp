@@ -1,20 +1,78 @@
 <template>
-    <div>
-       <div class="p-3 flex justify-end">
-           <button 
-            class="text-lg text-slate-600 focus:outline-none active:text-indigo-500"
-            @click="logout">
-                <i class="fa-solid fa-power-off"></i>
-           </button>
+    <div class="p-3">
+       <div class="pb-3 flex justify-end">
+            <div class="active:bg-red-500/20 bg-indigo-500/20 p-2 py-0.5 rounded">
+                <button 
+                 class="text-lg text-indigo-500 focus:outline-none active:text-red-500"
+                 @click="logout">
+                     <i class="fa-solid fa-power-off"></i>
+                </button>
+            </div>
        </div> 
+       <div class="pt-4 w-full flex flex-col">
+            <div v-if="profilepic" class="mx-auto">
+                <img :src="profilepic" class="object-contain w-[103px] h-[103px] border border-slate-300 rounded-full bg-indigo-500/[0.12]"/>
+            </div>
+            <div v-if="!profilepic" class="mx-auto p-5 px-6 text-indigo-500/40 border border-slate-300 rounded-full text-6xl bg-indigo-500/[0.12]">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="text-center pt-2">
+                <p class="text-slate-600 text-lg font-bold capitalize">{{ username }}</p>
+            </div>
+            <div class="flex items-center pt-5">
+                <div class="rounded-md bg-orange-600/25 w-[30px] h-[30px]  flex justify-center items-center px-2 py-0.5">
+                   <span class="text-orange-600 text-sm"> <i class="fa-solid fa-envelope"></i> </span>
+                </div>
+                <div style="width: calc(100% - 30px);font-size: 14px;"  class="pl-2 -mt-1 break-all text-slate-500 font-bold">
+                    {{ email }}
+                </div>
+            </div>
+            <div class="flex items-center pt-5">
+                <div class="rounded-md bg-indigo-600/25 w-[30px] h-[30px]  flex justify-center items-center px-2 py-0.5">
+                   <span class="text-indigo-600 text-sm"> <i class="fa-solid fa-mobile-screen"></i> </span>
+                </div>
+                <div style="width: calc(100% - 30px);font-size: 14px;"  class="pl-2 -mt-1 break-all text-slate-500 font-bold">
+                    {{ phonenumber }}
+                </div>
+            </div>
+            <div class="flex items-center pt-5">
+                <div class="rounded-md bg-emerald-600/25 w-[30px] h-[30px]  flex justify-center items-center px-2 py-0.5">
+                   <span class="text-emerald-600 text-sm"> <i class="fa-solid fa-location-dot"></i> </span>
+                </div>
+                <div style="width: calc(100% - 30px);font-size: 14px;" class="pl-2 -mt-1 break-all text-slate-500 break-word font-bold">
+                    {{ address }}
+                </div>
+            </div>
+            <div class="flex items-center pt-5">
+                <div class="rounded-md bg-yellow-600/25 w-[30px] h-[30px]  flex justify-center items-center px-2 py-0.5">
+                   <span class="text-yellow-600 text-sm"> <i class="fa-solid fa-location-arrow"></i> </span>
+                </div>
+                <div style="width: calc(100% - 30px);font-size: 14px;" class="pl-2 -mt-1 break-all text-slate-500 break-word font-bold">
+                    {{ pincode}}
+                </div>
+            </div>
+       </div>
     </div>
 </template>
 <script>
     export default{
         data(){
             return{
-    
+                username: '',
+                email: '',
+                phonenumber: '',
+                address: '',
+                pincode: '',
+                profilepic: '',
             }
+        },
+        mounted(){
+            this.username = this.$store.state.userDetails[0].username
+            this.email = this.$store.state.userDetails[0].email
+            this.phonenumber = this.$store.state.userDetails[0].phonenumber
+            this.address = this.$store.state.userDetails[0].address
+            this.pincode = this.$store.state.userDetails[0].pincode
+            this.profilepic = JSON.parse(this.$store.state.userDetails[0].profilepic)
         },
         methods:{
             logout(){

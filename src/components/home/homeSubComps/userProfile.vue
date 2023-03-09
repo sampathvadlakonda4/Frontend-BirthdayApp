@@ -12,23 +12,20 @@
                     <input class="pl-5 profilepic" type="file" @change="profilePicChanged" />
                 </div>
             </div>
-            <form @submit.prevent="createBirthday" class="px-3 flex gap-4 flex-col">
+            <form @submit.prevent="updateUser" class="px-3 flex gap-4 flex-col">
                 <div class="flex gap-2">
                     <input
                         class="w-full capitalize rounded pl-3 focus:outline-none border h-[40px]"
-                        v-model="username" type="text" placeholder="Enter user name" required/>
+                        v-model="username" @change="allowUpdate" type="text" placeholder="Enter user name" required/>
                     <input
                         class="w-full rounded pl-3 focus:outline-none border h-[40px]"
-                        v-model="email" type="email" placeholder="Enter email" required/>
-                    <input
-                        class="w-full rounded pl-3 focus:outline-none border h-[40px]"
-                        v-model="phonenumber" type="tel" minlength="10" maxlength="10" placeholder="Enter phone number" required/>
+                        v-model="email" @change="allowUpdate" type="email" placeholder="Enter email" required/>
                 </div>
                 <div class="flex gap-2">
                     <input
                         class="w-full rounded pl-3 focus:outline-none border h-[40px]"
-                        v-model="dateofbirth" type="date" required/>    
-                    <select v-model="gender" required
+                        v-model="phonenumber" @change="allowUpdate" type="tel" minlength="10" maxlength="10" placeholder="Enter phone number" required/>
+                    <select v-model="gender" @change="allowUpdate" required
                         class="w-full rounded pl-3 focus:outline-none border h-[40px]" placeholder="Select Gender">
                         <option value="">Select Gender</option>
                         <option value="Male">Male</option>
@@ -37,25 +34,34 @@
                     </select>
                     <input
                         class="w-full rounded pl-3 focus:outline-none border h-[40px]"
-                        v-model="country" type="text" placeholder="Enter country name" required/>    
+                        v-model="country" @change="allowUpdate" type="text" placeholder="Enter country name" required/>    
                 </div>
                 <textarea required rows="3"
                     class="w-full rounded pl-3 focus:outline-none border"
-                    v-model="address" placeholder="Enter address">
+                    v-model="address" @change="allowUpdate" placeholder="Enter address">
                 </textarea>
                 <div class="flex gap-2">
                     <input
                         class="w-full rounded pl-3 focus:outline-none border h-[40px]"
-                        v-model="pincode" type="tel" minlength="6" maxlength="6" placeholder="Enter pin code" required/>
-                    <input
-                        class="w-full rounded pl-3 focus:outline-none border h-[40px]"
-                        v-model="relation" type="text" placeholder="Enter your relation" required/>    
+                        v-model="pincode" @change="allowUpdate" type="tel" minlength="6" maxlength="6" placeholder="Enter pin code" required/>
+                    <div class="w-full relative">
+                        <input 
+                            class="w-full rounded pl-3 px-9 focus:outline-none border h-[40px]"
+                            v-model="password" @change="allowUpdate" :type="show_Password ? 'text' : 'password'" placeholder="Enter new password" required/>
+                        <button type="button"
+                            class="absolute right-3 top-2"
+                            @click="toggle_Password_Eye">
+                                <i v-if="!show_Password" class="fa-solid fa-eye"></i>
+                                <i v-if="show_Password" class="fa-solid fa-eye-slash"></i>
+                        </button>     
+                    </div>                                
                 </div>
                 <div>
                     <button type="submit" 
                         class="bg-indigo-600 text-white px-6 py-1 rounded shadow-xl drop-shadow focus:outline-none hover:bg-indigo-600/90"
-                        >
-                        Create
+                        :class=" !allow_update ? 'opacity-50' : '' "
+                        :disabled="!allow_update">
+                        Update
                     </button>
                 </div> 
             </form>
@@ -68,21 +74,23 @@ import backendPath from "../../../paths/backendPaths"
     export default{
         data(){
             return{
-                profilepic: null,
-                username: '',
-                email: '',
-                phonenumber: '',
-                dateofbirth: '',
-                gender: '',
-                country: '',
-                address: '',
-                pincode: '',
-                relation: '',
+                profilepic: JSON.parse(this.$store.state.userDetails[0].profilepic),
+                username: this.$store.state.userDetails[0].username,
+                email: this.$store.state.userDetails[0].email,
+                phonenumber: this.$store.state.userDetails[0].phonenumber,
+                password: this.$store.state.userDetails[0].password,
+                gender: this.$store.state.userDetails[0].gender,
+                country: this.$store.state.userDetails[0].country,
+                address: this.$store.state.userDetails[0].address,
+                pincode: this.$store.state.userDetails[0].pincode,
                 attachment: '',
+                show_Password: false,
+                allow_update: false,
             }
         },
         methods:{
             profilePicChanged(event){
+                this.allow_update = true;
                 var input = event.target;
                 if(input.files){
                     var reader = new FileReader();
@@ -93,37 +101,29 @@ import backendPath from "../../../paths/backendPaths"
                     reader.readAsDataURL(input.files[0]);
                 }
             },
-            async createBirthday(){
+            allowUpdate(){
+                this.allow_update = true;
+            },
+            async updateUser(){
                 let obj = {
                             profilepic: JSON.stringify(this.profilepic),
-                            name: this.username,
+                            username: this.username,
                             email: this.email,
                             phonenumber: this.phonenumber,
-                            dateofbirth: this.dateofbirth,
+                            password: this.password,
                             gender: this.gender,
                             country: this.country,
                             address: this.address,
                             pincode: this.pincode,
-                            relation: this.relation,
-                            loginuserid: this.$store.state.userDetails[0]['_id']
                         }
                 try{
-                    let path = backendPath.expressPath+"/birthday/addnew";
+                    let path = backendPath.expressPath+"/users/update";
                     let res = await axios.post(path,obj)
                     if(res.status == "200"){
-                        this.$toast.success("Birthday added successfully",{duration: 2000, position: "top", pauseOnHover: true})
-                        this.profilepic = null
-                        this.username = ''
-                        this.email = ''
-                        this.phonenumber = ''
-                        this.dateofbirth = ''
-                        this.gender = ''
-                        this.country = ''
-                        this.address = ''
-                        this.pincode = ''
-                        this.relation = ''
-                        this.attachment = ''
-                        document.querySelector(".profilepic").value = ""
+                        await this.$store.commit('createUserDetails',[res.data])
+                        localStorage.setItem('userDetails',JSON.stringify([res.data]))
+                        this.$toast.success("User profile updated successfully",{duration: 2000, position: "top", pauseOnHover: true})
+                        this.allow_update = false;
                     }
                     else{
                         this.$toast.error("Something went wrong",{duration: 2000, position: "top", pauseOnHover: true})
@@ -132,8 +132,11 @@ import backendPath from "../../../paths/backendPaths"
                 catch(err){
                     this.$toast.error(err.message,{duration: 2000, position: "top", pauseOnHover: true})
                 }                   
-            }
-        }
+            },
+            toggle_Password_Eye(){
+                this.show_Password = !this.show_Password
+            },
+        },
     }
 </script>
 <style>

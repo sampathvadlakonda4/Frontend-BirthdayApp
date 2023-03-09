@@ -13,7 +13,7 @@
                 <div class="relative flex pl-6 items-center">
                     <span>
                         <i class="fa-solid fa-rectangle-list"></i>
-                        <span class="pl-3">Birthday lists</span>
+                        <span class="pl-3 capitalize">Birthday lists</span>
                     </span>
                     <span v-if="route == '/home/birthdaylists'" class="absolute right-0 h-[20px] w-[4px] rounded-l-lg bg-orange-500"></span>
                 </div>
@@ -25,9 +25,21 @@
                 <div class="relative flex pl-6 items-center">
                     <span>
                         <i class="fa-solid fa-folder-plus"></i>
-                        <span class="pl-3">Add Birthday</span>
+                        <span class="pl-3 capitalize">Add Birthday</span>
                     </span>
                     <span v-if="route == '/home/addbirthday'" class="absolute right-0 h-[20px] w-[4px] rounded-l-lg bg-orange-500"></span>
+                </div>
+            </router-link>
+            <router-link
+                class="transition duration-200 font-semibold h-[20px] text-sm"
+                :class="route == '/home/userprofile' ? 'text-orange-500' : 'text-slate-500'"
+                to="/home/userprofile">
+                <div class="relative flex pl-6 items-center">
+                    <span>
+                        <i class="fa-solid fa-id-card"></i>
+                        <span class="pl-3 capitalize">user Profile</span>
+                    </span>
+                    <span v-if="route == '/home/userprofile'" class="absolute right-0 h-[20px] w-[4px] rounded-l-lg bg-orange-500"></span>
                 </div>
             </router-link>
         </div>

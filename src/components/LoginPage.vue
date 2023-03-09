@@ -87,8 +87,8 @@
                         </h3>
                         <div class="text-xs">
                             <div class="flex items-center">
-                                <img class="object-contain w-[75px] h-[75px] border border-slate-300 rounded-full bg-indigo-500/[0.12]" :src="createProfile" v-if="createProfile" />
-                                <span v-if="!createProfile"
+                                <img class="object-contain w-[75px] h-[75px] border border-slate-300 rounded-full bg-indigo-500/[0.12]" :src="createProfile" v-if="createProfile && createProfile != 'null'" />
+                                <span v-else
                                     class="w-[75px] h-[75px] py-4 px-6 text-indigo-500/40 border border-slate-300 rounded-full text-3xl bg-indigo-500/[0.12]" >
                                     <i class="fa-solid fa-user"></i>
                                 </span>

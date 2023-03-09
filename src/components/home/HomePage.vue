@@ -37,6 +37,9 @@ export default{
             username: '',
         }
     },
+    async beforeMount(){
+        await this.$store.commit('createUserDetails',JSON.parse(localStorage.getItem("userDetails")))
+    },
     async mounted(){
         // await this.$store.commit('createUserDetails',JSON.parse(localStorage.getItem("userDetails")))
         this.username = this.$store.state.userDetails[0]['username']

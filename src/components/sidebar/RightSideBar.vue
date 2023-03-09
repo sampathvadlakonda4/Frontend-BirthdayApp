@@ -18,6 +18,10 @@
             </div>
             <div class="text-center pt-2">
                 <p class="text-slate-600 text-lg font-bold capitalize">{{ username }}</p>
+                <p class="text-indigo-600 text-sm"> 
+                    <i class="fa-solid fa-location-dot"></i> 
+                    <span class="font-bold pl-1">{{ country}}</span>
+                </p>
             </div>
             <div class="flex items-center pt-5">
                 <div class="rounded-md bg-orange-600/25 w-[30px] h-[30px]  flex justify-center items-center px-2 py-0.5">
@@ -58,27 +62,31 @@
     export default{
         data(){
             return{
-                username: '',
-                email: '',
-                phonenumber: '',
-                address: '',
-                pincode: '',
-                profilepic: '',
+                // username: this.$store.state.userDetails[0].username,
+                // email: this.$store.state.userDetails[0].email,
+                // phonenumber: this.$store.state.userDetails[0].phonenumber,
+                // address: this.$store.state.userDetails[0].address,
+                // pincode: this.$store.state.userDetails[0].pincode,
+                // profilepic: JSON.parse(this.$store.state.userDetails[0].profilepic),
+                // country: this.$store.state.userDetails[0].country,
+                // gender: this.$store.state.userDetails[0].gender,
             }
-        },
-        mounted(){
-            this.username = this.$store.state.userDetails[0].username
-            this.email = this.$store.state.userDetails[0].email
-            this.phonenumber = this.$store.state.userDetails[0].phonenumber
-            this.address = this.$store.state.userDetails[0].address
-            this.pincode = this.$store.state.userDetails[0].pincode
-            this.profilepic = JSON.parse(this.$store.state.userDetails[0].profilepic)
         },
         methods:{
             logout(){
                 localStorage.clear()
                 this.$router.push("/")
             }
+        },
+        computed:{
+            username(){ return this.$store.state.userDetails[0].username},
+            email(){ return this.$store.state.userDetails[0].email},
+            phonenumber(){ return this.$store.state.userDetails[0].phonenumber},
+            address(){ return this.$store.state.userDetails[0].address},
+            pincode(){ return this.$store.state.userDetails[0].pincode},
+            profilepic(){ return JSON.parse(this.$store.state.userDetails[0].profilepic)},
+            country(){ return this.$store.state.userDetails[0].country},
+            gender(){ return this.$store.state.userDetails[0].gender},
         }
     }
 </script>

@@ -5,6 +5,7 @@ import LoginPage from "../components/LoginPage.vue"
 import HomePage from "../components/home/HomePage.vue"
 import BirthDayLists from "../components/home/homeSubComps/birthdayLists.vue"
 import AddBirthday from "../components/home/homeSubComps/addBirthday.vue"
+import UserProfile from "../components/home/homeSubComps/userProfile.vue"
 
  const guardRoute = (to,from,next)=>{
     if(localStorage.getItem("loggedIn")){
@@ -36,7 +37,12 @@ const routes = [
                 path: '/home/addbirthday',
                 component: AddBirthday,
                 beforeEnter: guardRoute,
-            }
+            },
+            {
+                path: '/home/userprofile',
+                component: UserProfile,
+                beforeEnter: guardRoute,
+            },
         ]
     }
 ]

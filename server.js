@@ -11,12 +11,12 @@ var options = {
   extensions: ['htm', 'html','css','js','ico','jpg','jpeg','png','svg'],
   index: ['index.html'],
   maxAge: '1m',
-  redirect: false
+  redirect: true
 }
 app.use(express.static('dist', options))
 
 const port = process.env.PORT || 3000
 
 app.listen(port, () => {
-  console.log(`React app listening at http://localhost:${port}`)
+  console.log(`Vue app listening at http://localhost:${port}`)
 })

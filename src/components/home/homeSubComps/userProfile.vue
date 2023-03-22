@@ -19,7 +19,7 @@
                         v-model="username" @change="allowUpdate" type="text" placeholder="Enter user name" required/>
                     <input
                         class="w-full rounded pl-3 focus:outline-none border h-[40px]"
-                        v-model="email" @change="allowUpdate" type="email" placeholder="Enter email" required/>
+                        v-model="email" @change="allowUpdate" type="email" disabled="true" placeholder="Enter email" required/>
                 </div>
                 <div class="flex gap-2">
                     <input
@@ -139,6 +139,8 @@ import backendPath from "../../../paths/backendPaths"
         },
     }
 </script>
-<style>
-
+<style scoped>
+input[disabled]{
+    background: #d7d7d7;
+}
 </style>

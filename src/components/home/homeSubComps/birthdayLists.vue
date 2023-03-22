@@ -65,27 +65,36 @@
             </div>
         </div>
         <div v-if="showEdit_Birthday" class="w-full">
-            name, email, phonenumber, address, pincode, relation, dateofbirth, gender , country, profilepic,  loginuserid
             <div class="pt-2">
-                <div class="flex flex-col gap-4 mb-5">
-                    <div v-if="profilepic && profilepic != 'null'">
-                        <img :src="profilepic" class="mr-auto ml-3 object-contain w-[103px] h-[103px] border border-slate-300 rounded-full bg-indigo-500/[0.12]"/>
+                <div class="flex justify-between mb-5">
+                    <div class="flex flex-col gap-4">
+                        <div v-if="profilepic && profilepic != 'null'">
+                            <img :src="profilepic" class="mr-auto ml-3 object-contain w-[103px] h-[103px] border border-slate-300 rounded-full bg-indigo-500/[0.12]"/>
+                        </div>
+                        <div v-else class="mr-auto ml-3 p-5 px-6 text-indigo-500/40 border border-slate-300 rounded-full text-6xl bg-indigo-500/[0.12]">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div class="text-xs">
+                            <input class="pl-5 profilepic" type="file" @change="profilePicChanged" />
+                        </div>
                     </div>
-                    <div v-else class="mr-auto ml-3 p-5 px-6 text-indigo-500/40 border border-slate-300 rounded-full text-6xl bg-indigo-500/[0.12]">
-                        <i class="fa-solid fa-user"></i>
-                    </div>
-                    <div class="text-xs">
-                        <input class="pl-5 profilepic" type="file" @change="profilePicChanged" />
+                    <div class="mr-3">
+                        <button type="button" 
+                            class="bg-indigo-600 text-white px-6 py-1 rounded shadow-xl drop-shadow focus:outline-none hover:bg-indigo-600/90"
+                            @click="goBacktoBD_List"
+                            >
+                            Back
+                        </button>
                     </div>
                 </div>
                 <form @submit.prevent="updateBirthday" class="px-3 flex gap-4 flex-col">
                     <div class="flex gap-2">
                         <input
                             class="w-full capitalize rounded pl-3 focus:outline-none border h-[40px]"
-                            v-model="name" type="text" placeholder="Enter user name" required/>
+                            v-model="name" type="text" placeholder="Enter user name" required disabled="true"/>
                         <input
                             class="w-full rounded pl-3 focus:outline-none border h-[40px]"
-                            v-model="email" type="email" placeholder="Enter email" required/>
+                            v-model="email" type="email" placeholder="Enter email" required disabled="true"/>
                         <input
                             class="w-full rounded pl-3 focus:outline-none border h-[40px]"
                             v-model="phonenumber" type="tel" minlength="10" maxlength="10" placeholder="Enter phone number" required/>
@@ -206,6 +215,9 @@ import backendPath from "../../../paths/backendPaths"
                 catch(err){
                     this.$toast.error(err.message,{duration: 2000, position: "top", pauseOnHover: true})
                 }
+            },
+            goBacktoBD_List(){
+                this.showEdit_Birthday = false;
             }
 
         },
@@ -231,6 +243,8 @@ import backendPath from "../../../paths/backendPaths"
         }
     }
 </script>
-<style>
-
+<style scoped>
+input[disabled]{
+    background: #d7d7d7;
+}
 </style>

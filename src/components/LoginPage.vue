@@ -33,11 +33,11 @@
                     </button>
                 </div>
             </div>
-            <div v-if="showLogin && !showSignUp && !showForgotPassword" class="page flex lg:pl-11 flex-col lg:justify-center w-full lg:w-[80%] pt-4 lg:pt-0"
+            <div v-if="showLogin && !showSignUp && !showForgotPassword" class="page flex lg:pl-11 flex-col lg:justify-center w-full lg:w-[80%] pt-4 lg:pt-0 pb-10 lg:pb-0"
                 style="height: calc(100vh - 45px)">
                 <div class="page_card border-2 border-indigo-500/10 bg-indigo-500/[0.12] rounded-lg p-8 py-5 lg:py-10">
                     <h3 class="mb-3 uppercase font-bold text-2xl lg:text-3xl text-slate-600">Log in</h3>
-                    <form class="flex flex-col gap-5 mt-10" @submit.prevent="Login">
+                    <form class="flex flex-col gap-5 mt-5 lg:mt-10" @submit.prevent="Login">
                         <input
                             class="w-full rounded pl-3 focus:outline-none border h-[40px]"
                             v-model="email" type="email" placeholder="Enter email" required/>
@@ -78,11 +78,11 @@
                     </form>
                 </div>
             </div>
-            <div v-if="!showLogin && showSignUp && !showForgotPassword" class="page flex lg:pl-11 flex-col lg:justify-center w-full lg:w-[95%] pt-4 lg:pt-0"
+            <div v-if="!showLogin && showSignUp && !showForgotPassword" class="page flex lg:pl-11 flex-col lg:justify-center w-full lg:w-[95%] pt-4 lg:pt-0 pb-10 lg:pb-0"
                 style="height: calc(100vh - 45px)">
-                <div class="page_card border-2 border-indigo-500/10 bg-indigo-500/[0.12] rounded-lg p-8 py-10">
+                <div class="page_card border-2 border-indigo-500/10 bg-indigo-500/[0.12] rounded-lg p-8 py-5 lg:py-10">
                     <div class="flex justify-between items-center flex-col lg:flex-row">
-                        <h3 class="mb-3 uppercase font-bold text-3xl text-slate-600">
+                        <h3 class="mb-3 uppercase font-bold text-2xl lg:text-3xl text-slate-600">
                             Sign Up
                         </h3>
                         <div class="text-xs">
@@ -96,7 +96,7 @@
                             </div>
                         </div>
                     </div>
-                    <form class="flex flex-col gap-5 mt-10" @submit.prevent="createUser">
+                    <form class="flex flex-col gap-5 mt-5 lg:mt-10" @submit.prevent="createUser">
                         <div class="flex gap-2">
                             <input
                                 class="w-full rounded pl-3 focus:outline-none border h-[40px]"
@@ -159,11 +159,11 @@
                     </form>
                 </div>
             </div>
-            <div v-if="!showLogin && !showSignUp && showForgotPassword" class="page flex lg:pl-11 flex-col lg:justify-center w-full lg:w-[80%] pt-4 lg:pt-0"
+            <div v-if="!showLogin && !showSignUp && showForgotPassword" class="page flex lg:pl-11 flex-col lg:justify-center w-full lg:w-[80%] pt-4 lg:pt-0 pb-10 lg:pb-0"
                 style="height: calc(100vh - 45px)">
-                <div class="page_card border-2 border-indigo-500/10 bg-indigo-500/[0.12] rounded-lg p-8 py-10">
-                    <h3 class="mb-3 uppercase font-bold text-3xl text-slate-600">Change Password</h3>
-                    <form class="flex flex-col gap-5 mt-10" @submit.prevent="createNewPassword">
+                <div class="page_card border-2 border-indigo-500/10 bg-indigo-500/[0.12] rounded-lg p-8 py-5 lg:py-10">
+                    <h3 class="mb-3 uppercase font-bold text-2xl lg:text-3xl text-slate-600">Change Password</h3>
+                    <form class="flex flex-col gap-5 mt-5 lg:mt-10" @submit.prevent="createNewPassword">
                         <input
                             class="w-full rounded pl-3 focus:outline-none border h-[40px]"
                             v-model="check_forgot_pw_email" type="email" placeholder="Enter email" required/>

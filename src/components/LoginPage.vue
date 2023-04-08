@@ -54,9 +54,9 @@
                         </div>                            
                          <div>   
                             <button type="submit" 
-                                class="bg-indigo-600 text-white px-6 py-1.5 rounded shadow-xl drop-shadow focus:outline-none hover:bg-indigo-600/90"
-                                >
-                                Login
+                                class="loginbtn bg-indigo-600 text-white px-6 py-1.5 rounded shadow-xl drop-shadow focus:outline-none hover:bg-indigo-600/90"
+                                :disabled="login_loader">
+                                {{ login_loader ? 'Processing...' : 'Login' }}
                             </button>
                         </div>
                          <div class="self-end -mt-2">   
@@ -240,6 +240,7 @@ import backendPath from "../paths/backendPaths"
                 showPassword: false,
                 email: '',
                 password: '',
+                login_loader: false,
 
                 //signup
                 show_Created_Password: false,
@@ -273,9 +274,11 @@ import backendPath from "../paths/backendPaths"
                 if(this.email && this.password){
                     let path = backendPath.expressPath+"/users/search"
                     try{
+                        this.login_loader = true; 
                         let res = await axios.post(path,{email: this.email, password: this.password})
                         console.log(res)
                         if(res.status == 200){
+                            this.login_loader = false;
                             localStorage.setItem('loggedIn', true)
                             localStorage.setItem('userDetails', JSON.stringify(res.data))
                             await this.$store.commit('createUserDetails',JSON.parse(localStorage.getItem("userDetails")))
@@ -515,5 +518,8 @@ import backendPath from "../paths/backendPaths"
         .page_card{
             overflow: auto;
         }
+    }
+    .loginbtn[disabled]{
+        filter: opacity(0.6);
     }
 </style>

@@ -1,8 +1,9 @@
 <template>
     <div>
         <div v-if="!showEdit_Birthday" class="flex flex-wrap">
+            <div class="font-bold lg:hidden text-lg underline text-slate-600"> Birthday List </div>
             <div v-for="(each,index) in birthdayLists" :key="index"
-                 class="p-2 w-1/3">
+                 class="p-2 w-full sm:w-1/2 md:w-1/3">
                  <!-- <div class="rounded px-4 py-3 shadow-lg border border-slate-200 bg-white/60"> -->
                    <div class="relative rounded px-4 py-3 shadow border border-slate-200 bg-indigo-500/[0.12]">
                      <div class="absolute right-3 top-0.5 text-sm flex gap-3 justify-end">
@@ -65,6 +66,7 @@
             </div>
         </div>
         <div v-if="showEdit_Birthday" class="w-full">
+            <div class="font-bold lg:hidden text-lg underline text-slate-600"> Edit Birthday </div>
             <div class="pt-2">
                 <div class="flex justify-between mb-5">
                     <div class="flex flex-col gap-4">

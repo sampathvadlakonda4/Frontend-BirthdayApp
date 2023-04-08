@@ -1,5 +1,6 @@
 <template>
     <div>
+        <div class="font-bold lg:hidden text-lg underline text-slate-600"> User Profile </div>
         <div class="pt-2">
             <div class="flex flex-col gap-4 mb-5">
                 <div v-if="profilepic && profilepic != 'null'">

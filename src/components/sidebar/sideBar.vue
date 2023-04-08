@@ -9,7 +9,8 @@
             <router-link
                 class="transition duration-200 font-semibold h-[20px] text-sm"
                 :class="route == '/home/birthdaylists' ? 'text-orange-500' : 'text-slate-500'"
-                to="/home/birthdaylists">
+                to="/home/birthdaylists"
+                @click="routeClick">
                 <div class="relative flex pl-6 items-center">
                     <span>
                         <i class="fa-solid fa-rectangle-list"></i>
@@ -21,7 +22,8 @@
             <router-link
                 class="transition duration-200 font-semibold h-[20px] text-sm"
                 :class="route == '/home/addbirthday' ? 'text-orange-500' : 'text-slate-500'"
-                to="/home/addbirthday">
+                to="/home/addbirthday"
+                @click="routeClick">
                 <div class="relative flex pl-6 items-center">
                     <span>
                         <i class="fa-solid fa-folder-plus"></i>
@@ -33,7 +35,8 @@
             <router-link
                 class="transition duration-200 font-semibold h-[20px] text-sm"
                 :class="route == '/home/userprofile' ? 'text-orange-500' : 'text-slate-500'"
-                to="/home/userprofile">
+                to="/home/userprofile"
+                @click="routeClick">
                 <div class="relative flex pl-6 items-center">
                     <span>
                         <i class="fa-solid fa-id-card"></i>
@@ -50,12 +53,16 @@
 </template>
 <script>
     export default{
+        emits:['hideMenu'],
         data(){
             return{
                 route: this.$router.currentRoute._value.fullPath
             }
         },
         methods:{
+            routeClick(){
+                this.$emit('hideMenu');
+            },
             // assignRoute(){
             //     this.route = this.$router.currentRoute._value.fullPath;
             // }

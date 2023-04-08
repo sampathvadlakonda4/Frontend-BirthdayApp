@@ -1,23 +1,23 @@
 <template>
-    <div class="bg-indigo-500/10 h-[100vh] flex">
+    <div class="input_pages bg-indigo-500/10 h-[100vh] flex flex-col lg:flex-row">
         <!-- <div class="px-4 w-full sm:w-3/4 md:w-1/2 mx-auto"> -->
-        <div class="w-1/2 px-4">
+        <div class="lg:w-1/2 px-4">
             <div class="h-[40px] pt-2 flex items-center text-indigo-500 font-bold text-2xl">
                 <i class="fas fa-birthday-cake"></i>
                 <span class="pl-3 pt-1">Sams Birthday World </span>
             </div>
-            <div v-if="!showLogin && !showSignUp && !showForgotPassword" class="flex pl-11 flex-col justify-center" 
+            <div v-if="!showLogin && !showSignUp && !showForgotPassword" class="flex pl-5 lg:pl-11 flex-col justify-start pt-6 lg:pt-0 lg:justify-center" 
                 style="height: calc(100vh - 45px)">
                 <div class="mb-5">
                     <h3 style="text-shadow:3px 2px 2px #9191917d"
-                        class="uppercase font-bold text-5xl mb-5 text-orange-500">
+                        class="uppercase font-bold text-3xl lg:text-5xl mb-5 text-orange-500">
                         Sam Welcomes You
                     </h3>
                     <h5 class="text-slate-700 text-xl mb-5 pl-2">
                         To his
                     </h5>
                     <h3 style="text-shadow: 2.3px 2px 2px #9191917d;"
-                        class="uppercase text-yellow-700 font-bold text-dark-500 text-3xl mb-5">
+                        class="uppercase text-yellow-700 font-bold text-dark-500 text-2xl lg:text-3xl mb-5">
                         Birthday World
                     </h3>
                     <p class="text-slate-900 font-semibold mb-5">
@@ -33,10 +33,10 @@
                     </button>
                 </div>
             </div>
-            <div v-if="showLogin && !showSignUp && !showForgotPassword" class="flex pl-11 flex-col justify-center w-[80%]"
+            <div v-if="showLogin && !showSignUp && !showForgotPassword" class="page flex lg:pl-11 flex-col lg:justify-center w-full lg:w-[80%] pt-4 lg:pt-0"
                 style="height: calc(100vh - 45px)">
-                <div class="border-2 border-indigo-500/10 bg-indigo-500/[0.12] rounded-lg p-8 py-10">
-                    <h3 class="mb-3 uppercase font-bold text-3xl text-slate-600">Log in</h3>
+                <div class="page_card border-2 border-indigo-500/10 bg-indigo-500/[0.12] rounded-lg p-8 py-5 lg:py-10">
+                    <h3 class="mb-3 uppercase font-bold text-2xl lg:text-3xl text-slate-600">Log in</h3>
                     <form class="flex flex-col gap-5 mt-10" @submit.prevent="Login">
                         <input
                             class="w-full rounded pl-3 focus:outline-none border h-[40px]"
@@ -78,10 +78,10 @@
                     </form>
                 </div>
             </div>
-            <div v-if="!showLogin && showSignUp && !showForgotPassword" class="flex pl-11 flex-col justify-center w-[95%]"
+            <div v-if="!showLogin && showSignUp && !showForgotPassword" class="page flex lg:pl-11 flex-col lg:justify-center w-full lg:w-[95%] pt-4 lg:pt-0"
                 style="height: calc(100vh - 45px)">
-                <div class="border-2 border-indigo-500/10 bg-indigo-500/[0.12] rounded-lg p-8 py-10">
-                    <div class="flex justify-between items-center">
+                <div class="page_card border-2 border-indigo-500/10 bg-indigo-500/[0.12] rounded-lg p-8 py-10">
+                    <div class="flex justify-between items-center flex-col lg:flex-row">
                         <h3 class="mb-3 uppercase font-bold text-3xl text-slate-600">
                             Sign Up
                         </h3>
@@ -159,9 +159,9 @@
                     </form>
                 </div>
             </div>
-            <div v-if="!showLogin && !showSignUp && showForgotPassword" class="flex pl-11 flex-col justify-center w-[80%]"
+            <div v-if="!showLogin && !showSignUp && showForgotPassword" class="page flex lg:pl-11 flex-col lg:justify-center w-full lg:w-[80%] pt-4 lg:pt-0"
                 style="height: calc(100vh - 45px)">
-                <div class="border-2 border-indigo-500/10 bg-indigo-500/[0.12] rounded-lg p-8 py-10">
+                <div class="page_card border-2 border-indigo-500/10 bg-indigo-500/[0.12] rounded-lg p-8 py-10">
                     <h3 class="mb-3 uppercase font-bold text-3xl text-slate-600">Change Password</h3>
                     <form class="flex flex-col gap-5 mt-10" @submit.prevent="createNewPassword">
                         <input
@@ -208,12 +208,12 @@
         </div>
 
         <!-- right side images -->
-        <div class="w-1/2 relative overflow-hidden">
-            <img class="z-10 ml-auto relative w-[70%] right-[0] top-[2%] rotate-[21deg]" src="../assets/images/birthday-flag.png" alt="birthday flags" />
+        <div class="imagesdiv w-full md:w-[80%] md:left-[10%] h-[25%] lg:h-auto lg:left-0 lg:w-1/2 absolute bottom-0 lg:relative overflow-hidden">
+            <img class="hidden lg:block h-full lg:h-auto z-10 ml-auto relative w-[70%] right-[0] top-[2%] rotate-[21deg]" src="../assets/images/birthday-flag.png" alt="birthday flags" />
             <!-- <img class="ml-auto relative w-[78%] right-[1%] -top-[25%] rotate-[0deg]" src="../assets/images/ballons-1.png" alt="birthday flags" /> -->
-            <img class="absolute h-[37vh] right-[30%] bottom-[23%]" src="../assets/images/bd-cake.png" alt="birthday flags" />
+            <img class="hidden lg:block absolute h-[37vh] right-[30%] bottom-[23%]" src="../assets/images/bd-cake.png" alt="birthday flags" />
             <!-- <img class="ml-auto fixed w-[80%] h-[30vh] right-[1%] bottom-[0] top-auto" src="../assets/images/people.png" alt="birthday flags" /> -->
-            <img class="absolute w-[95%] h-[40vh] -bottom-[7%] right-[5%]" src="../assets/images/people-2.png" alt="birthday flags" />
+            <img class="absolute w-[95%] h-full lg:h-[40vh] -bottom-[7%] right-[5%]" src="../assets/images/people-2.png" alt="birthday flags" />
             <!-- <button class="py-2 px-3 bg-indigo-500 text-white text-sm font-semibold rounded-md shadow focus:outline-none" @click="Login">Log In</button> -->
         </div>
     </div>
@@ -501,5 +501,19 @@ import backendPath from "../paths/backendPaths"
     }
 </script>
 <style scoped>
-
+    @media (max-width: 1024px){
+        /* .page{
+            height: auto !important;
+        } */
+        /* .input_pages:has(.page) .imagesdiv{
+            display: none;
+        } */
+        .page{
+            max-height: calc(100vh - 45px - 25%) !important;
+            height: auto !important;
+        }
+        .page_card{
+            overflow: auto;
+        }
+    }
 </style>

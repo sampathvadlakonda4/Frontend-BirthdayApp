@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="!showEdit_Birthday" class="flex flex-wrap">
-            <div class="font-bold lg:hidden text-lg underline text-slate-600"> Birthday List </div>
+            <div class="font-bold lg:hidden text-lg underline text-slate-600 w-full"> Birthday List </div>
             <div v-for="(each,index) in birthdayLists" :key="index"
                  class="p-2 w-full sm:w-1/2 md:w-1/3">
                  <!-- <div class="rounded px-4 py-3 shadow-lg border border-slate-200 bg-white/60"> -->
@@ -66,7 +66,7 @@
             </div>
         </div>
         <div v-if="showEdit_Birthday" class="w-full">
-            <div class="font-bold lg:hidden text-lg underline text-slate-600"> Edit Birthday </div>
+            <div class="font-bold lg:hidden text-lg underline text-slate-600 w-full"> Edit Birthday </div>
             <div class="pt-2">
                 <div class="flex justify-between mb-5">
                     <div class="flex flex-col gap-4">
@@ -161,9 +161,25 @@ import backendPath from "../../../paths/backendPaths"
             }
         },
         methods:{
-            editBirthday(obj){
+            profilePicChanged(event){
+                try{
+                    var input = event.target;
+                    if(input.files){
+                        var reader = new FileReader();
+                        reader.onload = (e) => {
+                            this.profilepic = e.target.result;
+                        }
+                        this.attachment = input.files[0];
+                        reader.readAsDataURL(input.files[0]);
+                    }
+                }
+                catch(err){
+                    this.profilepic = null
+                    this.attachment = null
+                }
+            },
+            async editBirthday(obj){
                 this.showEdit_Birthday = true;
-                this.profilepic = JSON.parse(obj.profilepic)
                 this.name = obj.name
                 this.email = obj.email
                 this.phonenumber = obj.phonenumber
@@ -173,21 +189,55 @@ import backendPath from "../../../paths/backendPaths"
                 this.address = obj.country
                 this.pincode = obj.pincode
                 this.relation = obj.relation
+                if(obj.profilepic){
+                    let file = obj.profilepic?.data
+                    var byteCharacters = await atob(file);
+                    var byteNumbers = new Array(byteCharacters.length);
+                    for (var i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    var byteArray = new Uint8Array(byteNumbers);
+                    var input = new Blob([byteArray], {
+                        type: "image/png",
+                    });
+                    this.profilepic =  URL.createObjectURL(input);
+                    this.attachment = input;
+                }
+                else{
+                    this.profilepic = null
+                    this.attachment = null
+                }
             },
             async updateBirthday(){
-                let obj = {
-                    profilepic: JSON.stringify(this.profilepic),
-                    name: this.name,
-                    email: this.email,
-                    phonenumber: this.phonenumber,
-                    dateofbirth: this.dateofbirth,
-                    gender: this.gender,
-                    country: this.country,
-                    address: this.address,
-                    pincode: this.pincode,
-                    relation: this.relation,
-                    loginuserid: this.$store.state.userDetails[0]["_id"]
+                // let obj = {
+                //     profilepic: JSON.stringify(this.profilepic),
+                //     name: this.name,
+                //     email: this.email,
+                //     phonenumber: this.phonenumber,
+                //     dateofbirth: this.dateofbirth,
+                //     gender: this.gender,
+                //     country: this.country,
+                //     address: this.address,
+                //     pincode: this.pincode,
+                //     relation: this.relation,
+                //     loginuserid: this.$store.state.userDetails[0]["_id"]
+                // }
+                let formData = new FormData()
+                formData.append('name',this.name)
+                formData.append("email", this.email)
+                formData.append("phonenumber", this.phonenumber)
+                formData.append("dateofbirth", this.dateofbirth)
+                formData.append("relation", this.relation)
+                formData.append("gender", this.gender)
+                formData.append("country", this.country)
+                formData.append("address", this.address)
+                formData.append("pincode", this.pincode)
+                formData.append("loginuserid", this.$store.state.userDetails[0]['_id'])
+                if(this.attachment){
+                    formData.append("profilepic",this.attachment)
                 }
+
+                let obj = formData;    
                 try{
                     let path = backendPath.expressPath+"/birthday/update";
                     let res = await axios.post(path,obj)

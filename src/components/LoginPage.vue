@@ -276,7 +276,6 @@ import backendPath from "../paths/backendPaths"
                     try{
                         this.login_loader = true; 
                         let res = await axios.post(path,{email: this.email, password: this.password})
-                        console.log(res)
                         if(res.status == 200){
                             this.login_loader = false;
                             localStorage.setItem('loggedIn', true)
@@ -321,14 +320,20 @@ import backendPath from "../paths/backendPaths"
                 this.password = ''
             },
             profilePicChanged(event){
-                var input = event.target;
-                if(input.files){
-                    var reader = new FileReader();
-                    reader.onload = (e) => {
-                        this.createProfile = e.target.result;
+                try{
+                    var input = event.target;
+                    if(input.files){
+                        var reader = new FileReader();
+                        reader.onload = (e) => {
+                            this.createProfile = e.target.result;
+                        }
+                        this.attachment = input.files[0];
+                        reader.readAsDataURL(input.files[0]);
                     }
-                    this.attachment = [input.files[0]];
-                    reader.readAsDataURL(input.files[0]);
+                }
+                catch(err){
+                    this.createProfile = null
+                    this.attachment = null
                 }
             },
             // async profilePicChanged(event) {
@@ -393,18 +398,32 @@ import backendPath from "../paths/backendPaths"
                 this.show_Created_Password= !this.show_Created_Password
             },
             async createUser(){
-                let obj = {
-                    username: this.createUserName,
-                    email: this.createEmail,
-                    phonenumber: this.createPhoneNumber,
-                    address: this.createAddress,
-                    pincode: this.createPinCode,
-                    password: this.createPassword,
-                    country: this.createCountry,
-                    gender: this.createGender,
-                    profilepic: JSON.stringify(this.createProfile),
+                // let obj = {
+                //     username: this.createUserName,
+                //     email: this.createEmail,
+                //     phonenumber: this.createPhoneNumber,
+                //     address: this.createAddress,
+                //     pincode: this.createPinCode,
+                //     password: this.createPassword,
+                //     country: this.createCountry,
+                //     gender: this.createGender,
+                //     profilepic: JSON.stringify(this.createProfile),
+                // }
+
+                let formData = new FormData()
+                formData.append('username',this.createUserName)
+                formData.append("email", this.createEmail)
+                formData.append("phonenumber", this.createPhoneNumber)
+                formData.append("password", this.createPassword)
+                formData.append("gender", this.createGender)
+                formData.append("country", this.createCountry)
+                formData.append("address", this.createAddress)
+                formData.append("pincode", this.createPinCode)
+                if(this.attachment){
+                    formData.append("profilepic",this.attachment)
                 }
 
+               let obj = formData;
                 try{
                     let path = backendPath.expressPath+"/users/signup";
                     const userCreated = await axios.post(path,obj)

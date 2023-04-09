@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="font-bold lg:hidden text-lg underline text-slate-600"> Add Birthday </div>
+        <div class="font-bold lg:hidden text-lg underline text-slate-600 w-full"> Add Birthday </div>
         <div class="pt-2">
             <div class="flex flex-col gap-4 mb-5">
                 <div v-if="profilepic && profilepic != 'null'">
@@ -84,30 +84,52 @@ import backendPath from "../../../paths/backendPaths"
         },
         methods:{
             profilePicChanged(event){
-                var input = event.target;
-                if(input.files){
-                    var reader = new FileReader();
-                    reader.onload = (e) => {
-                        this.profilepic = e.target.result;
+                try{
+                    var input = event.target;
+                    if(input.files){
+                        var reader = new FileReader();
+                        reader.onload = (e) => {
+                            this.profilepic = e.target.result;
+                        }
+                        this.attachment = input.files[0];
+                        reader.readAsDataURL(input.files[0]);
                     }
-                    this.attachment = [input.files[0]];
-                    reader.readAsDataURL(input.files[0]);
+                }
+                catch(err){
+                    this.profilepic = null
+                    this.attachment = null
                 }
             },
             async createBirthday(){
-                let obj = {
-                            profilepic: JSON.stringify(this.profilepic),
-                            name: this.username,
-                            email: this.email,
-                            phonenumber: this.phonenumber,
-                            dateofbirth: this.dateofbirth,
-                            gender: this.gender,
-                            country: this.country,
-                            address: this.address,
-                            pincode: this.pincode,
-                            relation: this.relation,
-                            loginuserid: this.$store.state.userDetails[0]['_id']
-                        }
+                // let obj = {
+                //             profilepic: JSON.stringify(this.profilepic),
+                //             name: this.username,
+                //             email: this.email,
+                //             phonenumber: this.phonenumber,
+                //             dateofbirth: this.dateofbirth,
+                //             gender: this.gender,
+                //             country: this.country,
+                //             address: this.address,
+                //             pincode: this.pincode,
+                //             relation: this.relation,
+                //             loginuserid: this.$store.state.userDetails[0]['_id']
+                //         }
+                    let formData = new FormData()
+                    formData.append('name',this.username)
+                    formData.append("email", this.email)
+                    formData.append("phonenumber", this.phonenumber)
+                    formData.append("dateofbirth", this.dateofbirth)
+                    formData.append("relation", this.relation)
+                    formData.append("gender", this.gender)
+                    formData.append("country", this.country)
+                    formData.append("address", this.address)
+                    formData.append("pincode", this.pincode)
+                    formData.append("loginuserid", this.$store.state.userDetails[0]['_id'])
+                    if(this.attachment){
+                        formData.append("profilepic",this.attachment)
+                    }
+
+                    let obj = formData;        
                 try{
                     let path = backendPath.expressPath+"/birthday/addnew";
                     let res = await axios.post(path,obj)

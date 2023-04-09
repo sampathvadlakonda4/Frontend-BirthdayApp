@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="font-bold lg:hidden text-lg underline text-slate-600"> User Profile </div>
+        <div class="font-bold lg:hidden text-lg underline text-slate-600 w-full"> User Profile </div>
         <div class="pt-2">
             <div class="flex flex-col gap-4 mb-5">
                 <div v-if="profilepic && profilepic != 'null'">
@@ -75,7 +75,7 @@ import backendPath from "../../../paths/backendPaths"
     export default{
         data(){
             return{
-                profilepic: JSON.parse(this.$store.state.userDetails[0].profilepic),
+                profilepic: '',
                 username: this.$store.state.userDetails[0].username,
                 email: this.$store.state.userDetails[0].email,
                 phonenumber: this.$store.state.userDetails[0].phonenumber,
@@ -91,32 +91,52 @@ import backendPath from "../../../paths/backendPaths"
         },
         methods:{
             profilePicChanged(event){
-                this.allow_update = true;
-                var input = event.target;
-                if(input.files){
-                    var reader = new FileReader();
-                    reader.onload = (e) => {
-                        this.profilepic = e.target.result;
+                try{
+                    this.allow_update = true;
+                    var input = event.target;
+                    if(input.files){
+                        var reader = new FileReader();
+                        reader.onload = (e) => {
+                            this.profilepic = e.target.result;
+                        }
+                        this.attachment = input.files[0];
+                        reader.readAsDataURL(input.files[0]);
                     }
-                    this.attachment = [input.files[0]];
-                    reader.readAsDataURL(input.files[0]);
+                }
+                catch(err){
+                    this.profilepic = null
+                    this.attachment = null
                 }
             },
             allowUpdate(){
                 this.allow_update = true;
             },
             async updateUser(){
-                let obj = {
-                            profilepic: JSON.stringify(this.profilepic),
-                            username: this.username,
-                            email: this.email,
-                            phonenumber: this.phonenumber,
-                            password: this.password,
-                            gender: this.gender,
-                            country: this.country,
-                            address: this.address,
-                            pincode: this.pincode,
+                // let obj = {
+                //             profilepic: JSON.stringify(this.profilepic),
+                //             username: this.username,
+                //             email: this.email,
+                //             phonenumber: this.phonenumber,
+                //             password: this.password,
+                //             gender: this.gender,
+                //             country: this.country,
+                //             address: this.address,
+                //             pincode: this.pincode,
+                //         }
+                        let formData = new FormData()
+                        formData.append('username',this.username)
+                        formData.append("email", this.email)
+                        formData.append("phonenumber", this.phonenumber)
+                        formData.append("password", this.password)
+                        formData.append("gender", this.gender)
+                        formData.append("country", this.country)
+                        formData.append("address", this.address)
+                        formData.append("pincode", this.pincode)
+                        if(this.attachment){
+                            formData.append("profilepic",this.attachment)
                         }
+
+                        let obj = formData;
                 try{
                     let path = backendPath.expressPath+"/users/update";
                     let res = await axios.post(path,obj)
@@ -138,6 +158,22 @@ import backendPath from "../../../paths/backendPaths"
                 this.show_Password = !this.show_Password
             },
         },
+        async mounted(){
+            if(this.$store.state.userDetails[0].profilepic){
+                let file = this.$store.state.userDetails[0].profilepic?.data
+                var byteCharacters = await atob(file);
+                var byteNumbers = new Array(byteCharacters.length);
+                for (var i = 0; i < byteCharacters.length; i++) {
+                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                }
+                var byteArray = new Uint8Array(byteNumbers);
+                var input = new Blob([byteArray], {
+                    type: "image/png",
+                });
+                this.profilepic =  URL.createObjectURL(input);
+                this.attachment = input;
+            }
+        }
     }
 </script>
 <style scoped>

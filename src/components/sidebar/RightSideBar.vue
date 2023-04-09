@@ -76,6 +76,24 @@
             logout(){
                 localStorage.clear()
                 this.$router.push("/")
+            },
+            get_profilepic(){
+                if(this.$store.state.userDetails[0].profilepic){
+                    let file = this.$store.state.userDetails[0].profilepic?.data
+                    var byteCharacters = atob(file);
+                    var byteNumbers = new Array(byteCharacters.length);
+                    for (var i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    var byteArray = new Uint8Array(byteNumbers);
+                    var input = new Blob([byteArray], {
+                        type: "image/png",
+                    });
+                    return URL.createObjectURL(input);
+                }
+                else{
+                    return null
+                }
             }
         },
         computed:{
@@ -84,7 +102,7 @@
             phonenumber(){ return this.$store.state.userDetails[0].phonenumber},
             address(){ return this.$store.state.userDetails[0].address},
             pincode(){ return this.$store.state.userDetails[0].pincode},
-            profilepic(){ return JSON.parse(this.$store.state.userDetails[0].profilepic)},
+            profilepic(){ return this.get_profilepic() },
             country(){ return this.$store.state.userDetails[0].country},
             gender(){ return this.$store.state.userDetails[0].gender},
         }
